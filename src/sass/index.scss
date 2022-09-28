@@ -1,2 +1,41 @@
 @import './common';
 @import './example';
+
+.container{
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.search-form{
+    text-align: center;
+}
+
+// .gallery{
+//     display: flex;
+//     flex-wrap: wrap;
+// }
+
+// .photo-card{
+//     // display: flex;
+    
+//     flex-basis: calc(100%/3);
+    
+// }
+
+.info-item{
+    margin: 0;
+    padding: 0;
+}
+
+// .load-more{
+//     display: block;
+//     margin-left: auto;
+//     margin-right: auto;
+// }
+
+.btnBlock{
+    text-align: center;
+}
