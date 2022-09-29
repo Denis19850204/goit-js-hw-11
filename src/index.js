@@ -45,7 +45,7 @@ function onLoadMore() {
 }
 
 function fetchInfo() {
-  const url = `https://pixabay.com/api/?key=30165080-69dc7af91b4e9c1a4c0e45d49&q=${searchValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=4&page=${pageNumber}`;
+  const url = `https://pixabay.com/api/?key=30165080-69dc7af91b4e9c1a4c0e45d49&q=${searchValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNumber}`;
 
   return fetch(url)
     .then(res => res.json())
@@ -70,23 +70,25 @@ function renderImage(hits) {
         return `
     <div class="photo-card">
         <a class="gallery-link" href="${largeImageURL}"></a>
-   <img src="${webformatURL}" alt="${tags}" width="300px" loading="lazy" />
+   <img src="${webformatURL}" alt="${tags}"  loading="lazy" />
   <div class="info">
      <p class="info-item">
-      <b>Likes: ${likes}</b>
+      <b>Likes ${likes}</b>
     </p>
     <p class="info-item">
-       <b>Views: ${views}</b>
+       <b>Views ${views}</b>
      </p>
      <p class="info-item">
-       <b>Comments: ${comments}</b>
+       <b>Comments ${comments}</b>
      </p>
     <p class="info-item">
-       <b>Downloads: ${downloads}</b>
+       <b>Downloads ${downloads}</b>
      </p>
-   </div>`;
+     </div>
+   </div>`
       }
-  ).join(" ");
+  ).join("");
+  
   
   galleryCard.insertAdjacentHTML('beforeend', card);
   
