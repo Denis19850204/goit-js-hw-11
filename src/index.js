@@ -1,4 +1,5 @@
 import Notiflix from 'notiflix';
+const axios = require('axios').default;
 
 const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
@@ -26,7 +27,6 @@ function onSubmitForm(e) {
   }
 
   pageNumber = 1;
-
   fetchInfo().then(renderImage);
 }
 
@@ -37,21 +37,42 @@ function onLoadMore() {
       loadMoreBtn.hidden = true;
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
-      )
-    }
-      
-      
-    );
+      );
+    });
 }
 
 function fetchInfo() {
-  const url = `https://pixabay.com/api/?key=30165080-69dc7af91b4e9c1a4c0e45d49&q=${searchValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNumber}`;
+  const url = `https://pixabay.com/api/`;
 
-  return fetch(url)
-    .then(res => res.json())
-    .then(data => {
+  
+
+  return axios
+    .get(url, {
+      params: {
+        key: '30165080-69dc7af91b4e9c1a4c0e45d49',
+        q: `${searchValue}`,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: 'true',
+        per_page: 40,
+        page: `${pageNumber}`,
+      },
+    })
+
+    .then(res => {
       pageNumber += 1;
-      return data.hits;
+      
+      if (res.data.totalHits === 0) {
+        loadMoreBtn.hidden = true;
+        Notiflix.Notify.warning(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      } else if (res.data.totalHits > 0) {
+        Notiflix.Notify.success(
+          `Hooray! We found ${res.data.totalHits} images.`
+        );
+      }
+      return res.data.hits;
     });
 }
 
@@ -85,13 +106,12 @@ function renderImage(hits) {
        <b>Downloads ${downloads}</b>
      </p>
      </div>
-   </div>`
+   </div>`;
       }
-  ).join("");
-  
-  
+    )
+    .join('');
+
   galleryCard.insertAdjacentHTML('beforeend', card);
-  
 }
 
 function clearGallaryCard() {
