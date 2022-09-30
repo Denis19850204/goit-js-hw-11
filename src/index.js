@@ -1,5 +1,6 @@
 import Notiflix from 'notiflix';
-const axios = require('axios');
+// const axios = require('axios');
+import axios from 'axios'
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
