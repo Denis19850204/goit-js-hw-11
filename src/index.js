@@ -1,5 +1,7 @@
 import Notiflix from 'notiflix';
 const axios = require('axios').default;
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
@@ -27,7 +29,8 @@ function onSubmitForm(e) {
   }
 
   pageNumber = 1;
-  fetchInfo().then(renderImage);
+  fetchInfo().then(renderImage)
+  
 }
 
 function onLoadMore() {
@@ -41,12 +44,10 @@ function onLoadMore() {
     });
 }
 
-function fetchInfo() {
+async function fetchInfo() {
   const url = `https://pixabay.com/api/`;
 
-  
-
-  return axios
+  return (response = await axios
     .get(url, {
       params: {
         key: '30165080-69dc7af91b4e9c1a4c0e45d49',
@@ -59,9 +60,22 @@ function fetchInfo() {
       },
     })
 
+    // return axios
+    //   .get(url, {
+    //     params: {
+    //       key: '30165080-69dc7af91b4e9c1a4c0e45d49',
+    //       q: `${searchValue}`,
+    //       image_type: 'photo',
+    //       orientation: 'horizontal',
+    //       safesearch: 'true',
+    //       per_page: 40,
+    //       page: `${pageNumber}`,
+    //     },
+    //   })
+
     .then(res => {
       pageNumber += 1;
-      
+
       if (res.data.totalHits === 0) {
         loadMoreBtn.hidden = true;
         Notiflix.Notify.warning(
@@ -73,7 +87,7 @@ function fetchInfo() {
         );
       }
       return res.data.hits;
-    });
+    }));
 }
 
 function renderImage(hits) {
@@ -90,8 +104,8 @@ function renderImage(hits) {
       }) => {
         return `
     <div class="photo-card">
-        <a class="gallery-link" href="${largeImageURL}"></a>
-   <img src="${webformatURL}" alt="${tags}"  loading="lazy" />
+        <a class="gallery-link" href="${largeImageURL}">
+   <img src="${webformatURL}" alt="${tags}"  loading="lazy" /></a>
   <div class="info">
      <p class="info-item">
       <b>Likes ${likes}</b>
@@ -112,6 +126,9 @@ function renderImage(hits) {
     .join('');
 
   galleryCard.insertAdjacentHTML('beforeend', card);
+
+  let galleryEl = new SimpleLightbox('.gallery a', {});
+  galleryEl.on(('show.simplelightbox', function () {}));
 }
 
 function clearGallaryCard() {
