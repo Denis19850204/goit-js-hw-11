@@ -47,7 +47,7 @@ function onLoadMore() {
 async function fetchInfo() {
   const url = `https://pixabay.com/api/`;
 
-  return response = await axios
+  return  await axios
     .get(url, {
       params: {
         key: '30165080-69dc7af91b4e9c1a4c0e45d49',
