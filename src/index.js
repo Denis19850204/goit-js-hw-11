@@ -1,5 +1,4 @@
 import Notiflix from 'notiflix';
-// const axios = require('axios');
 import axios from 'axios'
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -48,7 +47,7 @@ function onLoadMore() {
 async function fetchInfo() {
   const url = `https://pixabay.com/api/`;
 
-  return (response = await axios
+  return response = await axios
     .get(url, {
       params: {
         key: '30165080-69dc7af91b4e9c1a4c0e45d49',
@@ -82,17 +81,21 @@ async function fetchInfo() {
         Notiflix.Notify.warning(
           'Sorry, there are no images matching your search query. Please try again.'
         );
-      } else if (res.data.totalHits > 0) {
+      }
+      else if (res.data.totalHits > 0) {
         Notiflix.Notify.success(
           `Hooray! We found ${res.data.totalHits} images.`
         );
       }
-      return res.data.hits;
-    }));
+      console.log(res.data)
+      return res.data;
+    });
 }
 
-function renderImage(hits) {
-  const card = hits
+
+
+function renderImage(data) {
+  const card = data.hits
     .map(
       ({
         webformatURL,
