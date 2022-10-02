@@ -3,6 +3,7 @@ import Notiflix from 'notiflix';
 import renderImage from './render';
 import fetchInfo from './api';
 
+
 const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');

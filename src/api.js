@@ -15,7 +15,7 @@ export default async function fetchInfo(searchValue, pageNumber) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        per_page: 200,
+        per_page: 40,
         page: `${pageNumber}`,
       },
     })
