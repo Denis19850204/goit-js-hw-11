@@ -1,7 +1,7 @@
 import Notiflix from 'notiflix';
 import axios from 'axios';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import renderImage from './render';
 
 const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
@@ -21,7 +21,7 @@ function onSubmitForm(e) {
   clearGallaryCard();
   searchValue = e.currentTarget.elements.searchQuery.value;
 
-  if (searchValue === '') {
+  if (!searchValue) {
     loadMoreBtn.hidden = true;
     return Notiflix.Notify.warning(
       'Sorry, there are no images matching your search query. Please try again.'
@@ -36,6 +36,7 @@ function onLoadMore() {
   fetchInfo()
     .then(renderImage)
     .catch(data => {
+      console.log(data);
       loadMoreBtn.hidden = true;
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
@@ -43,7 +44,7 @@ function onLoadMore() {
     });
 }
 
-async function fetchInfo() {
+export default async function fetchInfo() {
   const url = `https://pixabay.com/api/`;
 
   return await axios
@@ -62,7 +63,11 @@ async function fetchInfo() {
     .then(res => {
       pageNumber += 1;
 
-      if (res.data.totalHits === 0) {
+      if (res.data.totalHits < 40) {
+        loadMoreBtn.hidden = true;
+      }
+
+      if (!res.data.totalHits) {
         loadMoreBtn.hidden = true;
         Notiflix.Notify.warning(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -77,47 +82,6 @@ async function fetchInfo() {
 
       return res.data;
     });
-}
-
-function renderImage(data) {
-  const card = data.hits
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => {
-        return `
-    <div class="photo-card">
-        <a class="gallery-link" href="${largeImageURL}">
-   <img src="${webformatURL}" alt="${tags}"  loading="lazy" /></a>
-  <div class="info">
-     <p class="info-item">
-      <b>Likes ${likes}</b>
-    </p>
-    <p class="info-item">
-       <b>Views ${views}</b>
-     </p>
-     <p class="info-item">
-       <b>Comments ${comments}</b>
-     </p>
-    <p class="info-item">
-       <b>Downloads ${downloads}</b>
-     </p>
-     </div>
-   </div>`;
-      }
-    )
-    .join('');
-
-  galleryCard.insertAdjacentHTML('beforeend', card);
-
-  let galleryEl = new SimpleLightbox('.gallery a', {});
-  galleryEl.on(('show.simplelightbox', function () {}));
 }
 
 function clearGallaryCard() {
